@@ -1,0 +1,325 @@
+/*
+ * Modern theme layer. Load LAST on every page (after the page's own CSS).
+ * Tokens first, then component overrides. See docs/STYLE_GUIDELINES.md.
+ * Never hard-code colours elsewhere: add a token here instead.
+ */
+
+:root {
+    /* surfaces */
+    --bg: #0b0d14;
+    --bg-glow: radial-gradient(1200px 600px at 50% -10%, #1d2340 0%, transparent 60%),
+        radial-gradient(900px 500px at 100% 100%, #3a0f18 0%, transparent 55%);
+    --surface-1: rgba(20, 24, 38, 0.82);
+    --surface-2: rgba(32, 38, 58, 0.9);
+    --surface-hover: rgba(52, 60, 90, 0.95);
+    --border: rgba(255, 255, 255, 0.12);
+    --border-strong: rgba(255, 255, 255, 0.28);
+
+    /* text */
+    --text: #e8ebf5;
+    --text-muted: #9aa3bd;
+
+    /* accents */
+    --accent: #ed1d24; /* Marvel red */
+    --accent-hover: #ff4b52;
+    --accent-2: #4f8cff;
+    --success: #34d399;
+    --danger: #ff5c6a;
+
+    /* shape + motion */
+    --radius-s: 6px;
+    --radius-m: 12px;
+    --radius-l: 18px;
+    --shadow-s: 0 2px 8px rgba(0, 0, 0, 0.35);
+    --shadow-m: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --blur: saturate(140%) blur(10px);
+
+    --font-ui: system-ui, -apple-system, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+    color-scheme: dark;
+}
+
+body {
+    font-family: var(--font-ui);
+    color: var(--text);
+}
+
+/* ---------- scrollbars ---------- */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+}
+
+/* ---------- buttons (in-game + generic) ---------- */
+.button {
+    --color: var(--surface-2);
+    --color2: var(--accent);
+    font-family: var(--font-ui);
+    letter-spacing: 0.02em;
+    color: var(--text);
+    background-color: var(--color);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-s);
+    box-shadow: var(--shadow-s);
+    backdrop-filter: var(--blur);
+    transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease),
+        transform 0.12s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.button:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--border-strong);
+}
+
+.button.clicked {
+    background-color: var(--accent);
+    border-color: var(--accent-hover);
+}
+
+.button:disabled,
+.button:hover:disabled {
+    background-color: var(--surface-1) !important;
+    color: var(--text-muted) !important;
+    border-color: var(--border);
+    box-shadow: none;
+    opacity: 0.6;
+}
+
+#btn-ok,
+#btn-end {
+    text-shadow: none;
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-m);
+}
+
+#btn-ok:not(:disabled) {
+    background-color: var(--accent);
+    border-color: var(--accent-hover);
+}
+
+#btn-ok:not(:disabled):hover {
+    background-color: var(--accent-hover);
+}
+
+#btn-end:not(:disabled) {
+    background-color: var(--surface-2);
+    border-color: var(--border-strong);
+}
+
+#quit-btn:hover {
+    background-color: var(--danger);
+}
+
+#save-quit-btn:hover {
+    background-color: var(--success);
+    color: #04130c;
+}
+
+/* ---------- panels ---------- */
+#prompt-box-container {
+    background-color: var(--surface-1);
+    backdrop-filter: var(--blur);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-m);
+    color: var(--text);
+    font-family: var(--font-ui);
+}
+
+#history {
+    font-family: var(--font-ui);
+}
+
+.notifications,
+.noticard {
+    font-family: var(--font-ui);
+}
+
+.noticard {
+    background: var(--surface-1);
+    backdrop-filter: var(--blur);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-m);
+}
+
+#top-bar::before {
+    background: var(--surface-1);
+    backdrop-filter: var(--blur);
+    border-bottom: 1px solid var(--border);
+}
+
+/* ---------- main menu ---------- */
+body.menu-page {
+    background: var(--bg-glow), var(--bg);
+    background-attachment: fixed;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.menu-page .menu {
+    width: min(720px, 92vw);
+}
+
+.menu-page h1 {
+    font-size: clamp(2rem, 6vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0;
+    background: linear-gradient(90deg, #fff 0%, var(--accent-hover) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.menu-page h2 {
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0.4rem 0 0;
+}
+
+.menu-page .main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+}
+
+.menu-btn {
+    all: unset;
+    box-sizing: border-box;
+    cursor: pointer;
+    padding: 18px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--text);
+    background: var(--surface-1);
+    backdrop-filter: var(--blur);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-s);
+    transition: transform 0.18s var(--ease), border-color 0.18s var(--ease),
+        background-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.menu-btn small {
+    display: block;
+    margin-top: 4px;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.menu-btn:hover,
+.menu-btn:focus-visible {
+    transform: translateY(-3px);
+    background: var(--surface-hover);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-m);
+}
+
+.menu-btn:focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 2px;
+}
+
+.menu-btn.primary {
+    background: linear-gradient(135deg, var(--accent) 0%, #a30f15 100%);
+    border-color: var(--accent-hover);
+}
+
+.menu-btn.primary small {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .menu-btn,
+    .button {
+        transition: none;
+    }
+    .menu-btn:hover {
+        transform: none;
+    }
+}
+
+/* ---------- generic pages (replay, scene, deck, cards, credits...) ---------- */
+body.themed {
+    background: var(--bg-glow), var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+}
+
+.themed a {
+    color: var(--accent-2);
+}
+
+.themed button,
+.themed input[type="button"],
+.themed input[type="submit"] {
+    font-family: var(--font-ui);
+    color: var(--text);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-s);
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+
+.themed button:hover:not(:disabled) {
+    background: var(--surface-hover);
+    border-color: var(--accent);
+}
+
+.themed button:focus-visible,
+.themed input:focus-visible,
+.themed select:focus-visible,
+.themed textarea:focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 2px;
+}
+
+.themed button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.themed input,
+.themed select,
+.themed textarea {
+    font-family: var(--font-ui);
+    color: var(--text);
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-s);
+    padding: 5px 8px;
+}
+
+.themed fieldset {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-m);
+    background: var(--surface-1);
+}
+
+.themed .replay-item {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-s);
+    transition: transform 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+
+.themed .replay-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+}
