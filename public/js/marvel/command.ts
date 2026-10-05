@@ -23,12 +23,15 @@ export class Command {
         }
     }
 
-    static async saveLocal() {
+    static async saveLocal(): Promise<boolean> {
         const response_block_thread = await fetch("save_local?");
         const text = await response_block_thread.text();
-        // const text = "A"
-        // prompt(`Your save file has been saved in:`, text)
+        if( !response_block_thread.ok ) {
+            Notify.showCommand(`Save failed: ${text}`)
+            return false
+        }
         Notify.showCommand(`Your save file has been saved in: ${text}`)
+        return true
     }
 
     static async uploadSave(save_type: "Bug"|"Crash"|"Share", comment: string="") {

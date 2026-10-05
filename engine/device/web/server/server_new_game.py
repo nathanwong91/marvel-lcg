@@ -55,6 +55,14 @@ class GameServerNewGame(GameServerBase):
         self.device_manager.AddSize("Save", len(compressed_data))
         return web.Response(body=compressed_data, content_type='application/json', headers={'Content-Encoding': 'gzip'})
 
+    async def save_local(self, request: web.Request) -> web.Response:
+        if not self.game.session.scene:
+            return web.Response(text="No game running", status=409)
+        file_path = self.game.session.SaveScene(delete_old=False)
+        if not file_path:
+            return web.Response(text="Save failed", status=500)
+        return web.Response(text=file_path)
+
     def play_puzzle(self, puzzle: 'PuzzleData'):
         from game.scene.scene import Scene
 
@@ -157,6 +165,7 @@ class GameServerNewGame(GameServerBase):
         self.AddAwaitGetSecurity('/load_replay', self.load_replay)
         self.AddPostSecurity('/load_replay_data', self.load_replay_data)
         self.AddAwaitGetSecurity('/save_replay_data', self.save_replay_data)
+        self.AddAwaitGetSecurity('/save_local', self.save_local)
         self.AddAwaitGetSecurity('/load_puzzle', self.load_puzzle)
         self.AddAwaitGetSecurity('/new_puzzle_replay', self.new_puzzle_replay)
         self.AddAwaitGetSecurity('/new_puzzle', self.new_puzzle)

@@ -314,6 +314,17 @@ export class Button{
         button.innerHTML = `Step ${Game.current_step_id}`
     }
 
+    static async doQuit(save: boolean) {
+        if( save ) {
+            if( !await Command.saveLocal() ) {
+                return
+            }
+        } else if( !confirm("Quit without saving? Unsaved progress will be lost.") ) {
+            return
+        }
+        window.location.href = '/'
+    }
+
     static async doSaveFile() {
         const response = await fetch(`save_replay_data`);
         if (!response.ok) {
@@ -756,6 +767,16 @@ export class Button{
             text: "Break",
             class_name: "debug-only",
             onClick: () => {Button.doDebug('/break')}
+        })
+        Button.createButtonBase(parent_div_right, {
+            text: "Save & Quit",
+            id: "save-quit-btn",
+            onClick: () => {Button.doQuit(true)}
+        })
+        Button.createButtonBase(parent_div_right, {
+            text: "Quit",
+            id: "quit-btn",
+            onClick: () => {Button.doQuit(false)}
         })
         Button.createButtonBase(parent_div_right, {
             text: "QSave",
